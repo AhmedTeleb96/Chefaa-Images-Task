@@ -1,9 +1,43 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.ChefaaImagesTask" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.ChefaaImagesTask" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryVariant">@color/primary_color</item>
+        <item name="colorOnPrimary">@color/primary_color</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/primary_color</item>
+        <item name="colorSecondaryVariant">@color/primary_color</item>
+        <item name="colorOnSecondary">@color/colorBlackHalfOpacity</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
     </style>
 
     <style name="Theme.ChefaaImagesTask" parent="Base.Theme.ChefaaImagesTask" />
+
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeColor">@color/primary_color</item>
+        <item name="boxStrokeWidthFocused">@dimen/_1sdp</item>
+        <item name="android:textColorHint">@color/colorBlackHalfOpacity</item>
+        <item name="boxBackgroundColor">@color/grey_border</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/_8sdp</item>
+        <item name="boxCornerRadiusTopStart">@dimen/_8sdp</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/_8sdp</item>
+        <item name="cursorColor">@color/black</item>
+        <item name="android:backgroundTint">@color/black</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/_8sdp</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="android:padding">@dimen/_5sdp</item>
+        <item name="android:textAppearance">@style/Font.Medium</item>
+        <item name="hintTextAppearance">@style/Font.Medium</item>
+    </style>
+
+    <style name="Font" parent="@android:style/TextAppearance">
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="Font.Medium" parent="Font">
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
 </resources>

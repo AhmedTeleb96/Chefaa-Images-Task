@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.teleb.chefaaimagestask.BuildConfig
 import com.teleb.chefaaimagestask.R
 import dagger.hilt.android.AndroidEntryPoint
 

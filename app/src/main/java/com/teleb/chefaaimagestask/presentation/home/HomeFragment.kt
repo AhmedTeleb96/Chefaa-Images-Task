@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.teleb.chefaaimagestask.BuildConfig
 import com.teleb.chefaaimagestask.R
 import com.teleb.chefaaimagestask.databinding.FragmentHomeBinding
@@ -39,16 +40,15 @@ class HomeFragment : Fragment() {
         binding.rvCharacters.adapter = charactersAdapter
 
         charactersAdapter.onItemClickListener = {
-
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDetailsFragment(it))
         }
         charactersAdapter.onItemLongClickListener = {
-
+            // TODO show popup
         }
 
         viewModel.characters.observe(viewLifecycleOwner){
             if (it == null) return@observe
             charactersAdapter.characters = it
-            Log.i("zzz", "onViewCreated: $it")
         }
 
         viewModel.loading.observe(viewLifecycleOwner){
@@ -63,6 +63,10 @@ class HomeFragment : Fragment() {
 
         binding.etSearchCaption.doOnTextChanged { text, _, _, _ ->
             charactersAdapter.searchByCaption(text.toString())
+        }
+
+        binding.addingCharacter.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDetailsFragment(null))
         }
     }
 

@@ -1,6 +1,7 @@
 package com.teleb.chefaaimagestask.data.repositories
 
 
+import android.content.Context
 import android.util.Log
 import com.teleb.chefaaimagestask.data.datasources.db.CharactersDao
 import com.teleb.chefaaimagestask.data.datasources.remote.ChefaaApiService
@@ -13,29 +14,33 @@ import com.teleb.chefaaimagestask.domain.repositories.CharactersRepository
 import com.teleb.chefaaimagestask.domain.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Named
 
 class CharactersRepositoryImp @Inject constructor(
     @Named("MarvelApi") private val apiService: ChefaaApiService,
     private val charactersDao: CharactersDao,
-) : CharactersRepository {
+    private val context: Context,
+    ) : CharactersRepository {
 
     override fun getAllCharacters(): Flow<Resource<List<CharacterEntity>>> =
         flow {
                 val response = apiService.getCharacters()
 
-                emit(Resource.Success(response.charactersData.results.toDomainEntities()))
+                emit(Resource.Success(response.charactersData.results.toDomainEntities(context)))
         }
 
     override suspend fun getCharactersLocal(): List<CharacterEntity> {
         val result = charactersDao.getAllCharacters()
-        return result.toDomainEntities().reversed()
+        return result.toDomainEntities(context).reversed()
     }
 
-    override suspend fun getCharacterById(id: Int): CharacterEntity {
+    override suspend fun getCharacterById(id: Int): Flow<CharacterEntity> {
         val result = charactersDao.getCharacterById(id)
-        return result.toDomainEntity()
+        return result.map {
+           it.toDomainEntity(context)
+        }
     }
 
     override suspend fun saveCharactersList(characterItems: List<CharacterEntity>) {

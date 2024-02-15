@@ -21,7 +21,7 @@ interface CharactersDao {
     suspend fun updateCharacter(characterItem: CharactersItemModel)
 
     @Query("SELECT * FROM CharactersItemModel where id=:id")
-    suspend fun getCharacterById(id: Int): CharactersItemModel
+    fun getCharacterById(id: Int): Flow<CharactersItemModel>
 
 
     @Query("DELETE FROM CharactersItemModel")

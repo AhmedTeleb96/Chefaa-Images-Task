@@ -6,4 +6,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface CharactersRepository {
     fun getAllCharacters() : Flow<Resource<List<CharacterEntity>>>
+    suspend fun getCharactersLocal(): List<CharacterEntity>
+    suspend fun getCharacterById(id: Int): CharacterEntity
+    suspend fun saveCharactersList(characterItems: List<CharacterEntity>)
+    suspend fun saveCharacterItem(characterItem: CharacterEntity)
+    suspend fun updateCharacterItem(characterItem: CharacterEntity)
+    suspend fun clearDatabase()
 }

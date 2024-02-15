@@ -1,6 +1,7 @@
 package com.teleb.chefaaimagestask.di
 
 
+import com.teleb.chefaaimagestask.data.datasources.db.CharactersDao
 import com.teleb.chefaaimagestask.data.datasources.remote.ChefaaApiService
 import com.teleb.chefaaimagestask.data.repositories.CharactersRepositoryImp
 import com.teleb.chefaaimagestask.domain.repositories.CharactersRepository
@@ -17,6 +18,6 @@ object CharactersRepositoryModule {
 
     @Singleton
     @Provides
-    fun provideCharactersRepository(@Named("MarvelApi") apiService: ChefaaApiService): CharactersRepository =
-        CharactersRepositoryImp(apiService)
+    fun provideCharactersRepository(@Named("MarvelApi") apiService: ChefaaApiService, charactersDao: CharactersDao): CharactersRepository =
+        CharactersRepositoryImp(apiService,charactersDao)
 }

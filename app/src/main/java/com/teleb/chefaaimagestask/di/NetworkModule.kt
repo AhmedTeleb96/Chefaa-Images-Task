@@ -3,7 +3,7 @@ package com.teleb.chefaaimagestask.di
 import com.google.gson.GsonBuilder
 import com.teleb.chefaaimagestask.BuildConfig
 import com.teleb.chefaaimagestask.data.datasources.remote.ChefaaApiService
-import com.teleb.chefaaimagestask.domain.utils.EncryptMd5
+import com.teleb.chefaaimagestask.domain.utils.encryptMd5
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -88,7 +88,7 @@ internal object NetworkModule {
         OkHttpClient().newBuilder().addInterceptor {chain ->
             val ts = System.currentTimeMillis()
 
-            val hash = "$ts${BuildConfig.MARVEL_PRIVATE_KEY}${BuildConfig.MARVEL_PUBLIC_KEY}".EncryptMd5()
+            val hash = "$ts${BuildConfig.MARVEL_PRIVATE_KEY}${BuildConfig.MARVEL_PUBLIC_KEY}".encryptMd5()
 
             val request = chain.request()
             val url = request.url

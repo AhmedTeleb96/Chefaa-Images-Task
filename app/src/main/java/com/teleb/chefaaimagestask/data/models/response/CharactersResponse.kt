@@ -3,6 +3,8 @@ package com.teleb.chefaaimagestask.data.models.response
 import com.google.gson.annotations.SerializedName
 import com.teleb.chefaaimagestask.domain.entities.CharacterEntity
 import com.teleb.chefaaimagestask.domain.entities.ThumbnailEntity
+import com.teleb.chefaaimagestask.domain.utils.toHttps
+import okhttp3.HttpUrl.Companion.toHttpUrl
 
 data class CharactersResponse
     (
@@ -52,4 +54,4 @@ data class ThumbnailModel
 
 fun List<CharactersItemModel>.toDomainEntities() = map { CharacterEntity(it.id,it.name,it.thumbnail.toDomainEntity()) }
 
-fun ThumbnailModel.toDomainEntity() = ThumbnailEntity(extension , path , "$path.$extension"  )
+fun ThumbnailModel.toDomainEntity() = ThumbnailEntity(extension , path , "$path.$extension".toHttps()  )

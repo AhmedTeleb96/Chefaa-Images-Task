@@ -5,10 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.teleb.chefaaimagestask.BuildConfig
 import com.teleb.chefaaimagestask.R
+import com.teleb.chefaaimagestask.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,20 +21,48 @@ class HomeFragment : Fragment() {
 
     private val viewModel: HomeViewModel by viewModels()
 
+    private lateinit var binding: FragmentHomeBinding
+    private lateinit var charactersAdapter: CharactersAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+    ): View {
+        binding = FragmentHomeBinding.inflate(inflater,container,false)
+        return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        charactersAdapter = CharactersAdapter()
+        binding.rvCharacters.adapter = charactersAdapter
+
+        charactersAdapter.onItemClickListener = {
+
+        }
+        charactersAdapter.onItemLongClickListener = {
+
+        }
+
         viewModel.characters.observe(viewLifecycleOwner){
             if (it == null) return@observe
+            charactersAdapter.characters = it
             Log.i("zzz", "onViewCreated: $it")
+        }
+
+        viewModel.loading.observe(viewLifecycleOwner){
+            if (it == null) return@observe
+            binding.loading.isVisible = it
+        }
+
+        viewModel.error.observe(viewLifecycleOwner){
+            if (it == null) return@observe
+            Toast.makeText(activity,it,Toast.LENGTH_SHORT).show()
+        }
+
+        binding.etSearchCaption.doOnTextChanged { text, _, _, _ ->
+            charactersAdapter.searchByCaption(text.toString())
         }
     }
 

@@ -30,7 +30,7 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_comics"
+        android:id="@+id/rv_characters"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -40,7 +40,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchLayout"
         app:spanCount="2"
-        tools:listitem="@layout/item_comic" />
+        tools:listitem="@layout/item_character" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add"
-        app:layout_anchor="@id/rv_comics"
+        app:layout_anchor="@id/rv_characters"
         app:layout_anchorGravity="bottom|end"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

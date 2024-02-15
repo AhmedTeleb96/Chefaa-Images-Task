@@ -1,6 +1,6 @@
 package com.teleb.chefaaimagestask.data.datasources.remote
 
-import com.teleb.chefaaimagestask.data.models.response.ComicResponse
+import com.teleb.chefaaimagestask.data.models.response.CharactersResponse
 import com.teleb.chefaaimagestask.data.models.response.TinfyResponse
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -12,8 +12,8 @@ import retrofit2.http.QueryMap
 
 interface ChefaaApiService
 {
-    @GET("public/comics")
-    suspend fun getComics(@QueryMap hashMap: HashMap<String, Any>): ComicResponse
+    @GET("public/characters")
+    suspend fun getCharacters(): CharactersResponse
 
     @POST("https://api.tinify.com/shrink")
     suspend fun shrinkLocalFile(

@@ -1,8 +1,10 @@
 package com.teleb.chefaaimagestask.data.models.response
 
 import com.google.gson.annotations.SerializedName
+import com.teleb.chefaaimagestask.domain.entities.CharacterEntity
+import com.teleb.chefaaimagestask.domain.entities.ThumbnailEntity
 
-data class ComicResponse
+data class CharactersResponse
     (
     @SerializedName("message")
     var message: String? = null,
@@ -11,12 +13,12 @@ data class ComicResponse
     @SerializedName("attributionText")
     var attributionText: String,
     @SerializedName("data")
-    var comicsData: ComicsDataModel,
+    var charactersData: CharactersDataModel,
     @SerializedName("status")
     var status: String
 )
 
-data class ComicsDataModel
+data class CharactersDataModel
     (
     @SerializedName("count")
     var count: Int,
@@ -25,25 +27,29 @@ data class ComicsDataModel
     @SerializedName("offset")
     var offset: Int,
     @SerializedName("results")
-    var results: List<ComicsItemModel>,
+    var results: List<CharactersItemModel>,
     @SerializedName("total")
     var total: Int
 )
 
-data class ComicsItemModel
+data class CharactersItemModel
     (
     @SerializedName("id")
     var id: Int,
     @SerializedName("thumbnail")
     var thumbnail: ThumbnailModel,
-    @SerializedName("title")
-    var title: String
+    @SerializedName("name")
+    var name: String
 )
 
 data class ThumbnailModel
     (
     @SerializedName("extension")
-    private var extension: String,
+     var extension: String,
     @SerializedName("path")
-    private var path: String
+     var path: String
 )
+
+fun List<CharactersItemModel>.toDomainEntities() = map { CharacterEntity(it.id,it.name,it.thumbnail.toDomainEntity()) }
+
+fun ThumbnailModel.toDomainEntity() = ThumbnailEntity(extension , path , "$path.$extension"  )

@@ -3,6 +3,7 @@ package com.teleb.chefaaimagestask.di
 import com.google.gson.GsonBuilder
 import com.teleb.chefaaimagestask.BuildConfig
 import com.teleb.chefaaimagestask.data.datasources.remote.ChefaaApiService
+import com.teleb.chefaaimagestask.domain.utils.EncryptMd5
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -84,7 +85,24 @@ internal object NetworkModule {
     @Singleton
     @Named("MARVEL")
     fun provideOkHttpClientMarvel(interceptor: HttpLoggingInterceptor) =
-        OkHttpClient().newBuilder().apply {
+        OkHttpClient().newBuilder().addInterceptor {chain ->
+            val ts = System.currentTimeMillis()
+
+            val hash = "$ts${BuildConfig.MARVEL_PRIVATE_KEY}${BuildConfig.MARVEL_PUBLIC_KEY}".EncryptMd5()
+
+            val request = chain.request()
+            val url = request.url
+                .newBuilder()
+                .addQueryParameter("ts", ts.toString())
+                .addQueryParameter("apikey", BuildConfig.MARVEL_PUBLIC_KEY)
+                .addQueryParameter("hash", hash)
+                .build()
+            val updated = request.newBuilder()
+                .url(url)
+                .build()
+
+            chain.proceed(updated)
+        }.apply {
             connectTimeout(30L, TimeUnit.SECONDS)
             retryOnConnectionFailure(true)
             readTimeout(30L, TimeUnit.SECONDS)

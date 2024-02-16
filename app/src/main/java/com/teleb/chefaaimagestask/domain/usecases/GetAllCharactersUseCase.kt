@@ -1,5 +1,6 @@
 package com.teleb.chefaaimagestask.domain.usecases
 
+import android.util.Log
 import com.teleb.chefaaimagestask.domain.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
@@ -29,7 +30,6 @@ class GetAllCharactersUseCase @Inject constructor(
                     is Resource.Failed -> {
 
                         val characters = getAllLocalCharactersUseCase.invoke()
-
                         emit(Resource.Success(characters))
                     }
                 }
@@ -42,8 +42,9 @@ class GetAllCharactersUseCase @Inject constructor(
             emit(Resource.Success(characters))
 
         }
-        catch (ex: Exception) {
+        /*catch (ex: Exception) {
+            Log.i("zzz", "invoke: $ex")
             emit(Resource.Failed(ex.message.toString()))
-        }
+        }*/
     }.flowOn(Dispatchers.IO)
 }

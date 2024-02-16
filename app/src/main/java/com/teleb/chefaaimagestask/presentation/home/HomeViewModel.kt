@@ -40,7 +40,7 @@ class HomeViewModel @Inject constructor(private val getAllCharactersUseCase: Get
                 .collect { resource ->
                 when (resource) {
                     is Resource.Success -> _characters.postValue(resource.data)
-                    is Resource.Failed -> _error.postValue(resource.message)
+                    is Resource.Failed<*> -> _error.postValue(resource.message)
                 }
 
             }

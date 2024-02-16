@@ -16,17 +16,43 @@ import kotlin.coroutines.suspendCoroutine
 data class CharacterEntity
 (
     val id: Int,
-    val name: String,
+    var name: String,
     val thumbnail: ThumbnailEntity,
     ) : Parcelable
 
 @Parcelize
-data class ThumbnailEntity
-(
+data class ThumbnailEntity(
     val extension: String,
-    val path: String,
+    var path: String ,
     val fullPath: String,
     var imageBitmap: Bitmap? = null,
 ) : Parcelable {
 
+    fun inInitialState() = path.isEmpty() && imageBitmap == null
+    suspend fun setImageAsBitmap(path: String, context: Context) =
+        suspendCoroutine { continuation ->
+            Glide.with(context).asBitmap()
+                .load(path)
+                .into(object : CustomTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap, transition: Transition<in Bitmap>?
+                    ) {
+                        imageBitmap = resource
+                        continuation.resume(resource)
+                    }
+
+                    override fun onLoadCleared(placeholder: Drawable?) {}
+                })
+        }
+
+    fun encodeToByteArray(): ByteArray {
+        val stream = ByteArrayOutputStream()
+        imageBitmap?.compress(getCompressFormat(), 100, stream)
+        return stream.toByteArray()
+    }
+
+    private fun getCompressFormat() = when (path.substringAfter(".")) {
+        "jpg" -> Bitmap.CompressFormat.JPEG
+        else -> Bitmap.CompressFormat.PNG
+    }
 }

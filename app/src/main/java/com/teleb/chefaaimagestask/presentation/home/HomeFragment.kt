@@ -58,6 +58,7 @@ class HomeFragment : Fragment() {
 
         viewModel.error.observe(viewLifecycleOwner){
             if (it == null) return@observe
+            Log.i("zzz", "onViewCreated: $it")
             Toast.makeText(activity,it,Toast.LENGTH_SHORT).show()
         }
 

@@ -12,6 +12,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.nio.charset.StandardCharsets
+import java.util.Base64
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
@@ -50,6 +52,7 @@ internal object NetworkModule {
         @Named("TINIFY") okHttpClient: OkHttpClient.Builder,
     ): Retrofit =
         Retrofit.Builder().client(okHttpClient.build())
+            .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(gsonFactory).build()
 
     @Provides
@@ -62,13 +65,11 @@ internal object NetworkModule {
     @Named("TINIFY")
     fun provideOkHttpClientTinify(interceptor: HttpLoggingInterceptor) =
         OkHttpClient().newBuilder().addInterceptor { chain ->
+            val authString = "api:${BuildConfig.TINIFY_API_KEY}"
+
             val newRequest = chain.request().newBuilder()
                 .addHeader("Accept", "application/json")
                 .addHeader("Content-Type", "application/json")
-                .addHeader(
-                    "Authorization",
-                    "api:${BuildConfig.TINIFY_API_KEY}"
-                )
                 .build()
             chain.proceed(newRequest)
 

@@ -1,6 +1,7 @@
 package com.teleb.chefaaimagestask.data.models.response
 
 import com.google.gson.annotations.SerializedName
+import com.teleb.chefaaimagestask.domain.entities.OutputEntity
 
 data class TinfyResponse(
     @SerializedName("message")
@@ -19,3 +20,5 @@ var url: String,
 @SerializedName("width")
 var width: Float
 )
+
+fun  OutputModel.toDomainEntity() = OutputEntity(height, url, width)

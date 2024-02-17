@@ -8,6 +8,7 @@
     tools:context=".presentation.main.MainActivity">
 
     <ImageView
+        android:id="@+id/iv_back"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/_16sdp"

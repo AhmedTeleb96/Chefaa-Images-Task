@@ -9,12 +9,14 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.palette.graphics.Palette
 import com.teleb.chefaaimagestask.R
@@ -120,6 +122,10 @@ class DetailsFragment : Fragment() {
             })
             binding.ivCharacterImg.setImageBitmap(it.thumbnail.imageBitmap)
             it.thumbnail.imageBitmap?.let { imageBitmap -> setDominantColor(imageBitmap) }
+        }
+
+        activity?.findViewById<ImageView>(R.id.iv_back)?.setOnClickListener {
+            activity?.onBackPressedDispatcher?.onBackPressed()
         }
 
     }

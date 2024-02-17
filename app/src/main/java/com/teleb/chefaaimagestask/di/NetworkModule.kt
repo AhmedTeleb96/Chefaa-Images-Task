@@ -1,6 +1,7 @@
 package com.teleb.chefaaimagestask.di
 
 import com.google.gson.GsonBuilder
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.teleb.chefaaimagestask.BuildConfig
 import com.teleb.chefaaimagestask.data.datasources.remote.ChefaaApiService
 import com.teleb.chefaaimagestask.domain.utils.encryptMd5
@@ -43,6 +44,7 @@ internal object NetworkModule {
     ): Retrofit =
         Retrofit.Builder().client(okHttpClient.build())
             .baseUrl(BuildConfig.BASE_URL)
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(gsonFactory).build()
     @Provides
     @Singleton
@@ -53,6 +55,7 @@ internal object NetworkModule {
     ): Retrofit =
         Retrofit.Builder().client(okHttpClient.build())
             .baseUrl(BuildConfig.BASE_URL)
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(gsonFactory).build()
 
     @Provides

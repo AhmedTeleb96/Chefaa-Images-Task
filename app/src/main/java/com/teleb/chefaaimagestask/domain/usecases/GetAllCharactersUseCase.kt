@@ -3,6 +3,7 @@ package com.teleb.chefaaimagestask.domain.usecases
 import android.util.Log
 import com.teleb.chefaaimagestask.domain.utils.Resource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import java.net.UnknownHostException
@@ -12,39 +13,42 @@ class GetAllCharactersUseCase @Inject constructor(
     private val getAllRemoteCharactersUseCase: GetAllRemoteCharactersUseCase,
     private val getAllLocalCharactersUseCase: GetAllLocalCharactersUseCase,
     private val saveAllCharactersUseCase: SaveAllCharactersUseCase,
-    private val deleteAllCharactersUseCase: DeleteAllCharactersUseCase,
 ) {
 
     // implementing caching algorithm
     suspend operator fun invoke() = flow {
         try {
-            getAllRemoteCharactersUseCase.invoke().collect {
-                when (it) {
-                    is Resource.Success -> {
-                        deleteAllCharactersUseCase.invoke()
-                        saveAllCharactersUseCase.invoke(it.data)
+            getAllRemoteCharactersUseCase.invoke()
+                .catch { e ->
+                    Log.i("vvv", "invoke: ${e.message}")
+                }
+                .collect {
+                    when (it) {
+                        is Resource.Success -> {
 
-                        emit(Resource.Success(it.data))
-                    }
+                                saveAllCharactersUseCase.invoke(it.data)
+                                val characters = getAllLocalCharactersUseCase.invoke()
 
-                    is Resource.Failed -> {
+                                emit(Resource.Success(characters))
 
-                        val characters = getAllLocalCharactersUseCase.invoke()
-                        emit(Resource.Success(characters))
+                        }
+
+                        is Resource.Failed -> {
+
+                            val characters = getAllLocalCharactersUseCase.invoke()
+                            emit(Resource.Success(characters))
+                        }
                     }
                 }
-            }
-        }
-        catch (ex: UnknownHostException) {
+        } catch (ex: UnknownHostException) {
 
             val characters = getAllLocalCharactersUseCase.invoke()
-
             emit(Resource.Success(characters))
 
+        } catch (ex: Exception) {
+
+            val characters = getAllLocalCharactersUseCase.invoke()
+            emit(Resource.Success(characters))
         }
-        /*catch (ex: Exception) {
-            Log.i("zzz", "invoke: $ex")
-            emit(Resource.Failed(ex.message.toString()))
-        }*/
     }.flowOn(Dispatchers.IO)
 }

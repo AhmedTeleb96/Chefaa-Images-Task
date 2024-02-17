@@ -116,7 +116,7 @@ class DetailsViewModel @Inject constructor(
             ImageFileUtils(context).createFileFromUri(context, imageUriSelected)
         } else ImageFileUtils(context).saveBitmapToFile(characterEntity.thumbnail.imageBitmap!!)
 
-        return ResizeRequest(selectedFile.path,height, width, characterEntity)
+        return ResizeRequest(selectedFile.absolutePath,height, width, characterEntity)
     }
 
 

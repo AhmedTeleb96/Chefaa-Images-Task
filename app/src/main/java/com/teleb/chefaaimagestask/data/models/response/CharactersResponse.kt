@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
+import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -62,7 +63,8 @@ data class CharactersItemModel
 data class ThumbnailModel
     (
     @SerializedName("extension")
-    var extension: String,
+    @ColumnInfo(defaultValue = "jpg")
+    var extension: String?,
     @SerializedName("path")
     var path: String,
     var imageBytes: ByteArray?,
@@ -71,8 +73,8 @@ data class ThumbnailModel
         return if (imageBytes != null ) BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes?.size ?: 0) else null
     }
 
-    suspend fun setImageAsBitmap(path: String, context: Context) =
-        suspendCoroutine { continuation ->
+    suspend fun setImageAsBitmap(path: String, context: Context) = suspendCoroutine { continuation ->
+
             Glide.with(context).asBitmap()
                 .load(path)
                 .into(object : CustomTarget<Bitmap>() {
@@ -86,7 +88,6 @@ data class ThumbnailModel
                     override fun onLoadCleared(placeholder: Drawable?) {}
                 })
         }
-
     fun encodeToByteArray(resource: Bitmap): ByteArray {
         val stream = ByteArrayOutputStream()
         resource.compress(getCompressFormat(), 100, stream)
@@ -122,7 +123,7 @@ suspend fun ThumbnailModel.toDomainEntity(context: Context) = ThumbnailEntity(
     extension,
     path,
     "$path.$extension".toHttps(),
-    setImageAsBitmap("$path.$extension".toHttps(), context)
+    if (imageBytes == null)setImageAsBitmap("$path.$extension".toHttps(), context) else getBitmap()
 )
 
-fun ThumbnailEntity.toDataModel() = ThumbnailModel(extension, path,encodeToByteArray())
+fun ThumbnailEntity.toDataModel() = ThumbnailModel(extension ?:"", path,encodeToByteArray())

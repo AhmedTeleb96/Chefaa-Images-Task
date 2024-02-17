@@ -22,9 +22,9 @@ data class CharacterEntity
 
 @Parcelize
 data class ThumbnailEntity(
-    val extension: String,
+    val extension: String? ="",
     var path: String ,
-    val fullPath: String,
+    val fullPath: String?="",
     var imageBitmap: Bitmap? = null,
 ) : Parcelable {
 

@@ -63,7 +63,7 @@ class ResizeImageService : JobService() {
                     setFinalResult(WorkerResult.DISMISS_LOADING)
                 }
                 .catch {e->
-                    Log.i("xxx", "resizeImage: ${e.message}")
+                    Log.i("xxx", "resizeImage: ${e}")
                     jobFinished(params, false)
                 }
                 .collect {

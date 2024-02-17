@@ -13,7 +13,7 @@ interface CharactersDao {
     suspend fun insert(character: CharactersItemModel): Long
 
     @Query("SELECT * FROM CharactersItemModel")
-    fun getAllCharacters(): List<CharactersItemModel>
+    suspend fun getAllCharacters(): List<CharactersItemModel>
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAllCharacters(characterItems: List<CharactersItemModel>)
 

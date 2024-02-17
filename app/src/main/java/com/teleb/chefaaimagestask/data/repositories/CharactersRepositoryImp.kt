@@ -32,8 +32,8 @@ class CharactersRepositoryImp @Inject constructor(
         }
 
     override suspend fun getCharactersLocal(): List<CharacterEntity> {
-        val result = charactersDao.getAllCharacters()
-        return result.toDomainEntities(context).reversed()
+            val result = charactersDao.getAllCharacters()
+            return result.toDomainEntities(context).reversed()
     }
 
     override suspend fun getCharacterById(id: Int): Flow<CharacterEntity> {

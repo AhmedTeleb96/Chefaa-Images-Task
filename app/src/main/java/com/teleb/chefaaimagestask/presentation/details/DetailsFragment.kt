@@ -90,7 +90,7 @@ class DetailsFragment : Fragment() {
                     Random().nextInt(1000),
                     thumbnail = ThumbnailEntity("", "", ""), name = title
                 )
-                if (validInput() && imageUriSelected != null)
+                if (validInput() && (imageUriSelected != null || character.thumbnail.inInitialState()))
                     viewModel.resizeImageWithValidation(
                         character,
                         etWidth.text.toString(),
@@ -98,7 +98,7 @@ class DetailsFragment : Fragment() {
                         isInternetAvailable
                     )
                 else
-                    Toast.makeText(activity,"please complete fields",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity,"fields not complete or no image exist",Toast.LENGTH_SHORT).show()
             }
             ivCharacterImg.setOnClickListener {
                 openGallery()

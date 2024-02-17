@@ -24,7 +24,7 @@ class TinyPngRepositoryImp @Inject constructor(
     @Named("TinifyApi") private val apiService: ChefaaApiService,
     private val charactersDao: CharactersDao,
     private val context: Context,
-    ) : TinifyRepository {
+) : TinifyRepository {
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun shrinkImageFile(
         characterEntity: CharacterEntity,
@@ -36,13 +36,14 @@ class TinyPngRepositoryImp @Inject constructor(
 
         val imageFileUrl = request["image_file_url"] as String
 
-        val result = if (characterEntity.thumbnail.path.isNotEmpty()) apiService.shrinkUrlFile(auth, mapOf(
-            "source" to mapOf(
-                "url" to imageFileUrl,
+        val result = if (characterEntity.thumbnail.path.isNotEmpty()) apiService.shrinkUrlFile(
+            auth, mapOf(
+                "source" to mapOf(
+                    "url" to imageFileUrl,
+                )
             )
         )
-        )
-            else apiService.shrinkLocalFile(auth,request["image_file"] as RequestBody)
+        else apiService.shrinkLocalFile(auth, request["image_file"] as RequestBody)
         return result.output.toDomainEntity()
     }
 

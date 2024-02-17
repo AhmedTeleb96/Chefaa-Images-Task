@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.teleb.chefaaimagestask.databinding.ItemCharacterBinding
 import com.teleb.chefaaimagestask.domain.entities.CharacterEntity
 
@@ -21,7 +20,7 @@ class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.CharactersViewH
 
             tvCaption.text = characterEntity.name
 
-            Glide.with(this.root).load(characterEntity.thumbnail.fullPath).into(this.ivComicImage)
+            ivComicImage.setImageBitmap(characterEntity.thumbnail.imageBitmap)
 
             itemView.setOnClickListener {
                 onItemClickListener?.invoke(characterEntity)
@@ -33,13 +32,12 @@ class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.CharactersViewH
         }
     }
 
-     var characters: List<CharacterEntity>
+    var characters: List<CharacterEntity>
         get() = differ.currentList
         set(value) {
             characterItems = value
             performSearch(searchQuery)
         }
-
 
 
     private val differCallBack = object : DiffUtil.ItemCallback<CharacterEntity>() {
@@ -73,6 +71,7 @@ class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.CharactersViewH
         searchQuery = query
         performSearch(query)
     }
+
     private fun performSearch(query: String) {
         val filteredList = if (query.isEmpty()) {
             characterItems

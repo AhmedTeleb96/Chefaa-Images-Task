@@ -48,17 +48,19 @@ class HomeFragment : Fragment() {
 
         viewModel.characters.observe(viewLifecycleOwner){
             if (it == null) return@observe
+            binding.refresh.isRefreshing = false
             charactersAdapter.characters = it
         }
 
         viewModel.loading.observe(viewLifecycleOwner){
             if (it == null) return@observe
+            binding.refresh.isRefreshing = false
             binding.loading.isVisible = it
         }
 
         viewModel.error.observe(viewLifecycleOwner){
             if (it == null) return@observe
-            Log.i("zzz", "onViewCreated: $it")
+            binding.refresh.isRefreshing = false
             Toast.makeText(activity,it,Toast.LENGTH_SHORT).show()
         }
 
@@ -69,6 +71,14 @@ class HomeFragment : Fragment() {
         binding.addingCharacter.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDetailsFragment(null))
         }
+
+        binding.refresh.setOnRefreshListener {
+            viewModel.getAllCharacters()
+        }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getAllCharacters()
+    }
 }

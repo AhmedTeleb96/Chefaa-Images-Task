@@ -20,6 +20,9 @@ class GetAllCharactersUseCase @Inject constructor(
         try {
             getAllRemoteCharactersUseCase.invoke()
                 .catch { e ->
+                    val characters = getAllLocalCharactersUseCase.invoke()
+                    emit(Resource.Success(characters))
+
                     Log.i("vvv", "invoke: ${e.message}")
                 }
                 .collect {

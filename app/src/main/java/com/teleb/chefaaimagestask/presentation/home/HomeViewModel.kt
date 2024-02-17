@@ -19,8 +19,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val getAllCharactersUseCase: GetAllCharactersUseCase
-,private val getAllLocalCharactersUseCase: GetAllLocalCharactersUseCase) : ViewModel() {
+class HomeViewModel @Inject constructor(
+    private val getAllCharactersUseCase: GetAllCharactersUseCase
+) : ViewModel() {
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean>
@@ -34,33 +35,27 @@ class HomeViewModel @Inject constructor(private val getAllCharactersUseCase: Get
     val characters: LiveData<List<CharacterEntity>?>
         get() = _characters
 
-    private fun getAllCharacters() {
-        viewModelScope.launch(Dispatchers.IO){
+    fun getAllCharacters() {
+        viewModelScope.launch(Dispatchers.IO) {
             getAllCharactersUseCase.invoke().onStart {
-                    _loading.postValue(true)
-                }
+                _loading.postValue(true)
+            }
                 .onCompletion {
                     _loading.postValue(false)
                 }
                 .catch { e ->
-                    Log.i("vvv", "invoke111: ${e.message}")
+                    Log.i("vvv", "${e.message}")
                 }
                 .collect { resource ->
-                    Log.i("vvv", "invoke11: ${Thread.currentThread().name}")
 
                     when (resource) {
-                    is Resource.Success -> _characters.postValue(resource.data)
-                    is Resource.Failed -> _error.postValue(resource.message)
-                }
+                        is Resource.Success -> _characters.postValue(resource.data)
+                        is Resource.Failed<*> -> _error.postValue(resource.message)
+                    }
 
-            }
-            //_characters.postValue(c)
-            //Log.i("vvv", "invoke12: ${c}")
+                }
 
         }
     }
 
-    init {
-        getAllCharacters()
-    }
 }

@@ -29,13 +29,22 @@
             </intent-filter>
         </activity>
 
-
         <service
             android:name=".presentation.details.resizeService.ResizeImageService"
             android:exported="false"
             android:foregroundServiceType="dataSync|location|mediaPlayback"
             android:stopWithTask="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
     </application>
 

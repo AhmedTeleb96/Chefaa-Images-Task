@@ -1,6 +1,7 @@
 package com.teleb.chefaaimagestask.presentation.home
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -11,7 +12,7 @@ import com.teleb.chefaaimagestask.domain.entities.CharacterEntity
 class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.CharactersViewHolder>() {
 
     var onItemClickListener: ((CharacterEntity) -> Unit)? = null
-    var onItemLongClickListener: ((CharacterEntity) -> Unit)? = null
+    var onItemLongClickListener: ((CharacterEntity,View) -> Unit)? = null
     private var characterItems: List<CharacterEntity> = emptyList()
 
     inner class CharactersViewHolder(private val binding: ItemCharacterBinding) :
@@ -26,7 +27,7 @@ class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.CharactersViewH
                 onItemClickListener?.invoke(characterEntity)
             }
             itemView.setOnLongClickListener {
-                onItemLongClickListener?.invoke(characterEntity)
+                onItemLongClickListener?.invoke(characterEntity,this.root)
                 true
             }
         }

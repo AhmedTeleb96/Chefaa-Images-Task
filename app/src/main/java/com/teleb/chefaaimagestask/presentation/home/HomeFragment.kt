@@ -3,9 +3,11 @@ package com.teleb.chefaaimagestask.presentation.home
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -14,6 +16,8 @@ import androidx.navigation.fragment.findNavController
 import com.teleb.chefaaimagestask.BuildConfig
 import com.teleb.chefaaimagestask.R
 import com.teleb.chefaaimagestask.databinding.FragmentHomeBinding
+import com.teleb.chefaaimagestask.domain.entities.CharacterEntity
+import com.teleb.chefaaimagestask.presentation.utils.ImageUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -42,8 +46,8 @@ class HomeFragment : Fragment() {
         charactersAdapter.onItemClickListener = {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDetailsFragment(it))
         }
-        charactersAdapter.onItemLongClickListener = {
-            // TODO show popup
+        charactersAdapter.onItemLongClickListener = { characterEntity , view ->
+            showImagePopupMenu(view, characterEntity)
         }
 
         viewModel.characters.observe(viewLifecycleOwner){
@@ -77,6 +81,26 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun showImagePopupMenu(view: View, characterEntity: CharacterEntity) {
+        val popupMenu = PopupMenu(requireContext(), view)
+        popupMenu.inflate(R.menu.image_menu)
+        popupMenu.setOnMenuItemClickListener { item: MenuItem ->
+            when (item.itemId) {
+                R.id.action_share -> ImageUtils.shareImage(
+                    requireContext(),
+                    characterEntity.thumbnail.imageBitmap!!
+                )
+
+                R.id.action_save -> ImageUtils.saveImage(
+                    characterEntity.thumbnail.imageBitmap!!
+                ).let {
+                    if (it) Toast.makeText(activity,"image saved successfully",Toast.LENGTH_SHORT).show()
+                }
+            }
+            true
+        }
+        popupMenu.show()
+    }
     override fun onResume() {
         super.onResume()
         viewModel.getAllCharacters()
